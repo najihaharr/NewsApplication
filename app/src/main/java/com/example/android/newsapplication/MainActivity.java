@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         TextView hintTextView = findViewById(R.id.hint);
 
         if (news == null || news.isEmpty()) {
-            hintTextView.setText("No news found!\n.Unknown Error\nTry Again\nCheck Internet Connection them Reopen the App.");
+            hintTextView.setText("No news found!\n.Unknown Error\nTry Again\nCheck Internet Connection then Reopen the App.");
         } else {
             mAdapter.addAll(news);
             Toast.makeText(getApplicationContext(), "Updated!", Toast.LENGTH_SHORT).show();
