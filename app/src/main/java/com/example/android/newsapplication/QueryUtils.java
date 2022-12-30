@@ -177,7 +177,7 @@ public class QueryUtils {
                     lastName = currentTagsAuthor.getString(KEY_LASTNAME);
                 }
 
-                date = date.replaceAll("[a-zA-Z]", " ").substring(0, 9);
+                date = date.replaceAll("[a-zA-Z]", " ").substring(0, 10);
                 //date = DateFor.format(date);
 
                 // Add the new article to the list of news.
