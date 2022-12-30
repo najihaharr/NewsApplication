@@ -82,6 +82,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 // Send the intent to launch a new activity
                 startActivity(websiteIntent);
+
+                ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    Toast.makeText(getApplicationContext(), "Opening News", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed Opening News:\nCheck Internet Connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -151,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         TextView hintTextView = findViewById(R.id.hint);
 
         if (news == null || news.isEmpty()) {
-            hintTextView.setText("No news found!\n.Unknown Error\nTry Again\nCheck Internet Connection then Reopen the App.");
+            mAdapter.clear();
+            hintTextView.setText("No news found!\nTry Again\nCheck internet connection and then reopen the app.");
         } else {
             mAdapter.addAll(news);
             Toast.makeText(getApplicationContext(), "Updated!", Toast.LENGTH_SHORT).show();
