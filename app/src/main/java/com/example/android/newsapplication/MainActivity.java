@@ -112,8 +112,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-
-
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
