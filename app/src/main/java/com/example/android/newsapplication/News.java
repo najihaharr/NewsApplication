@@ -5,16 +5,18 @@ public class News {
     private String mNewsCategory;
     private String mNewsDate;
     private String mNewsUrl;
-    private int mImgResourceId = NO_IMAGE_PROVIDED;
+    private String fNameAuthor;
+    private String lNameAuthor;
+    private String mAuthor;
 
-    // -1 because its out of the range of all the possible valid resource ID
-    private static final int NO_IMAGE_PROVIDED = -1;
-
-    public News(String newsTitle, String newsCategory, String newsDate, String newsUrl) {
+    public News(String newsTitle, String newsCategory, String newsDate, String newsUrl, String firstName, String lastName) {
          mNewsTitle = newsTitle;
          mNewsCategory = newsCategory;
-         mNewsDate= newsDate;
-         mNewsUrl= newsUrl;
+         mNewsDate = newsDate;
+         mNewsUrl = newsUrl;
+         String author = "";
+         author = author.concat(firstName + " " + lastName);
+         mAuthor = author;
     }
 
     public String getNewsTitle() {
@@ -33,11 +35,16 @@ public class News {
         return mNewsUrl;
     }
 
-    public int getImgResourceId() {
-        return mImgResourceId;
+    public String getmAuthor() {
+        return mAuthor;
     }
 
-    public boolean hasImage() {
-        return mImgResourceId != NO_IMAGE_PROVIDED;
+    public boolean hasAuthor() {
+        if(mAuthor.isEmpty() || mAuthor == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

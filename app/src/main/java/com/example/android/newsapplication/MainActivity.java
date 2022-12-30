@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,12 +30,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private NewsAdapter mAdapter;
-    private LinearLayout progressLayout;
-
 
     /** URL for Guardian news data */
-    private static final String GUARDIAN_REQUEST_URL =
-            "https://content.guardianapis.com/search?q=general&api-key=test";
+    private static final String REQUEST_URL =
+            "https://content.guardianapis.com/search?"; // sample: https://content.guardianapis.com/search?q=general&api-key=test
 
     /** TextView that is displayed when the list is empty */
     private TextView mEmptyStateTextView;
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         NewsAsyncTask task = new NewsAsyncTask();
-        task.execute(GUARDIAN_REQUEST_URL);
+        task.execute(REQUEST_URL);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected earthquake.
@@ -117,17 +116,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
-        SharedPreferences sPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String minNews = sPreferences.getString(getString(R.string.settings_min_news_key), getString(R.string.settings_min_news_default));
-        String orderBy = sPreferences.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
-        String section = sPreferences.getString(getString(R.string.settings_section_news_key), getString(R.string.settings_section_news_default));
+        // getString retrieves a String value from the preferences. The second parameter is the default value for this preference.
+        String minNews = sharedPref.getString(getString(R.string.settings_min_news_key), getString(R.string.settings_min_news_default));
+        String orderBy = sharedPref.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+        String section = sharedPref.getString(getString(R.string.settings_section_news_key), getString(R.string.settings_section_news_default));
 
-        Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
+        // parse breaks apart the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(REQUEST_URL);
+
+        // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-/*        uriBuilder.appendQueryParameter("api-key", getString(R.string.test));
-        uriBuilder.appendQueryParameter("show-tags", getString(R.string.contributor));*/
+        // Append query parameter and its value. For example, the `format=geojson`
+        // https://content.guardianapis.com/search?show-tags=contributor&q=football&api-key=test
+
+        uriBuilder.appendQueryParameter("api-key", getString(R.string.test));
+        uriBuilder.appendQueryParameter("show-tags", getString(R.string.contributor));
         uriBuilder.appendQueryParameter("page-size", minNews);
         uriBuilder.appendQueryParameter("order-by", orderBy);
 
@@ -135,18 +141,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             uriBuilder.appendQueryParameter("section", section);
         }
 
+        Log.v("MainActivity", uriBuilder.toString());
+
         return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> news) {
+
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        TextView hintTextView = findViewById(R.id.hint);
+
         if (news == null || news.isEmpty()) {
-            TextView textView = findViewById(R.id.hint);
-            textView.setText("No news found!\n.Unknown Error\nTry Again\nCheck Internet Connection them Reopen the App.");
+            hintTextView.setText("No news found!\n.Unknown Error\nTry Again\nCheck Internet Connection them Reopen the App.");
         } else {
             mAdapter.addAll(news);
             Toast.makeText(getApplicationContext(), "Updated!", Toast.LENGTH_SHORT).show();
-            progressLayout.setVisibility(View.GONE);
+            loadingIndicator.setVisibility(View.GONE);
         }
     }
 
@@ -165,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settingsIntent);
             return true;
         }

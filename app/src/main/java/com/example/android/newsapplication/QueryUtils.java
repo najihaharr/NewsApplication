@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class QueryUtils {
     private static final String KEY_WEBPUBLICATIONDATE = "webPublicationDate";
     private static final String KEY_WEBURL = "webUrl";
     private static final String KEY_TAGS = "tags";
+    private static final String KEY_FIRSTNAME = "firstName";
+    private static final String KEY_LASTNAME = "lastName";
 
     private QueryUtils() {
     }
@@ -142,6 +145,7 @@ public class QueryUtils {
 
         // Create an empty ArrayList that we can start adding news to
         List<News> newsList = new ArrayList<>();
+        //SimpleDateFormat DateFor = new SimpleDateFormat("dd MMMM yyyy");
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -150,7 +154,8 @@ public class QueryUtils {
 
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
-            JSONArray resultsArray = baseJsonResponse.getJSONArray(KEY_RESULTS);
+            JSONObject response = baseJsonResponse.getJSONObject(KEY_RESPONSE);
+            JSONArray resultsArray = response.getJSONArray(KEY_RESULTS);
 
             // For each article in the resultsArray, create an {@link News} object
             for (int i = 0; i < resultsArray.length(); i++) {
@@ -163,10 +168,20 @@ public class QueryUtils {
                 String date = currentNews.getString(KEY_WEBPUBLICATIONDATE);
                 String url = currentNews.getString(KEY_WEBURL);
 
-                date = date.replaceAll("[a-zA-Z]", " ");
+                JSONArray tagsAuthor = currentNews.getJSONArray(KEY_TAGS);
+                String firstName = "";
+                String lastName = "";
+                if (tagsAuthor.length() != 0) {
+                    JSONObject currentTagsAuthor = tagsAuthor.getJSONObject(0);
+                    firstName = currentTagsAuthor.getString(KEY_FIRSTNAME);
+                    lastName = currentTagsAuthor.getString(KEY_LASTNAME);
+                }
+
+                date = date.replaceAll("[a-zA-Z]", " ").substring(0, 9);
+                //date = DateFor.format(date);
 
                 // Add the new article to the list of news.
-                newsList.add(new News(newsTitle, category, date, url));
+                newsList.add(new News(newsTitle, category, date, url, firstName, lastName));
             }
 
         } catch (JSONException e) {

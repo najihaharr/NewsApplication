@@ -1,20 +1,20 @@
 <resources>
-    <string name="app_name">NewsApplication</string>
+    <string name="app_name">News Application</string>
 
-
-    <string name="settings_title">Settings</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Settings</string>
 
     <string name="settings_min_news_label">Minimum Articles</string>
     <string name="settings_min_news_default">10</string>
     <string name="settings_min_news_key">min_news</string>
 
-    <string name="settings_order_by_default">Latest</string>
+    <string name="settings_order_by_default">newest</string>
     <string name="settings_order_by_labels">Order By</string>
     <string name="settings_order_by_key">order_by</string>
 
     <string name="settings_order_by_label">Order By</string>
 
-    <string name="settings_order_by_latest_news_label">Latest</string>
+    <string name="settings_order_by_newest_news_label">Newest</string>
     <string name="settings_order_by_oldest_news_label">Oldest</string>
     <string name="settings_order_by_relevance_news_label">Relevance</string>
 
@@ -40,21 +40,22 @@
     <string name="settings_section_Film_news_label">Film</string>
     <string name="settings_section_Film_value">film</string>
 
-
-
+    <!--REQUEST_URL URI builder-->
+    <string name="test">test</string>
+    <string name="contributor">contributor</string>
 
     <string-array name="settings_order_by_labels">
-        <item>@string/settings_order_by_latest_news_label</item>
+        <item>@string/settings_order_by_newest_news_label</item>
         <item>@string/settings_order_by_oldest_news_label</item>
         <item>@string/settings_order_by_relevance_news_label</item>
     </string-array>
 
-    <string name="settings_order_by_latest_news_value">latest</string>
+    <string name="settings_order_by_newest_news_value">newest</string>
     <string name="settings_order_by_oldest_news_value">oldest</string>
     <string name="settings_order_by_relevance_news_value">relevance</string>
 
     <string-array name="settings_order_by_values">
-        <item>@string/settings_order_by_latest_news_value</item>
+        <item>@string/settings_order_by_newest_news_value</item>
         <item>@string/settings_order_by_oldest_news_value</item>
         <item>@string/settings_order_by_relevance_news_value</item>
     </string-array>

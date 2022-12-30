@@ -1,6 +1,7 @@
 package com.example.android.newsapplication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,18 +48,14 @@ public class NewsAdapter extends ArrayAdapter<News> {
         TextView newsDateTextView = (TextView) listItemView.findViewById(R.id.news_date);
         newsDateTextView.setText(currentNews.getNewsDate());
 
-        ImageView newsImage = (ImageView) listItemView.findViewById(R.id.news_image);
-        newsImage.setImageResource(currentNews.getImgResourceId());
+        TextView authorTextView = (TextView) listItemView.findViewById(R.id.author);
 
-        if (currentNews.hasImage()) {
-            // Set the ImageView to the image resource specified in the current Word
-            newsImage.setImageResource(currentNews.getImgResourceId());
-            newsImage.setVisibility(View.VISIBLE);
+        if (currentNews.hasAuthor()) {
+            authorTextView.setText(currentNews.getmAuthor());
+            authorTextView.setVisibility(View.VISIBLE);
         }
-
         else {
-            // GONE = Image is hidden and doesn't take up any space on the View
-            newsImage.setVisibility(View.GONE);
+            authorTextView.setVisibility(View.GONE);
         }
 
         return listItemView;
