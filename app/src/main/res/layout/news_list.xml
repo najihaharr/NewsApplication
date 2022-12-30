@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingEnd="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:background="#F5F5DC"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingEnd="16dp"
+    android:paddingRight="16dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,9 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:fontFamily="serif"
             android:maxLines="2"
             android:textColor="@color/textColorNewsTitle"
-            android:fontFamily="serif"
             android:textSize="18sp"
             tools:text="Long placeholder location that should wrap to more than 2 lines of text" />
 
@@ -43,10 +43,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginRight="15dp"
+                android:textAllCaps="true"
                 android:textColor="#B08BBB"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:textAllCaps="true"
                 tools:text="Author Name" />
 
             <TextView
