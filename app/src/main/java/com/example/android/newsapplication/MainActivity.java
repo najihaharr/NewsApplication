@@ -127,8 +127,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
 
-        Log.i(LOG_TAG, "Test: calling onCreateLoader()..");
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         // getString retrieves a String value from the preferences. The second parameter is the default value for this preference.
@@ -154,15 +152,12 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             uriBuilder.appendQueryParameter("section", section);
         }
 
-        Log.i(LOG_TAG, uriBuilder.toString());
-
         return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> news) {
 
-        Log.i(LOG_TAG, "TEST: onLoadFinished called...");
         mEmptyStateTextView.setText(R.string.no_news);
 
         View loadingIndicator = findViewById(R.id.loading_indicator);
@@ -180,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
-        Log.i(LOG_TAG, "TEST: onLoaderReset called...");
         mAdapter.clear();
     }
 
@@ -205,33 +199,4 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
 
     }
-
-/*    private class NewsAsyncTask extends AsyncTask<String, Void, List<News>> {
-        *//**
-         * This method runs on a background thread and performs the network request.
-         * We should not update the UI from a background thread, so we return a list of
-         * {@link News}s as the result.
-         *//*
-        @Override
-        protected List<News> doInBackground (String... urls) {
-            // Don't perform the request if there are no URLs, or the first URL is null.
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
-
-            List<News> result = QueryUtils.fetchNewsData(urls[0]);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(List<News> data) {
-            // Clear the adapter of previous earthquake data
-            mAdapter.clear();
-
-            if (data != null && !data.isEmpty()) {
-                mAdapter.addAll(data);
-            }
-        }
-
-    }*/
 }
