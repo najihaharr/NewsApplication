@@ -42,6 +42,8 @@ public class QueryUtils {
     }
 
     public static List<News> fetchNewsData(String requestUrl) {
+        Log.i(LOG_TAG, "TEST: fetchNewsData() called...");
+
         // Create URL object
         URL url = createUrl(requestUrl);
 

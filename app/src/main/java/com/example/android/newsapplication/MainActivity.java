@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -22,12 +21,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>,
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<News>>,
         SharedPreferences.OnSharedPreferenceChangeListener {
+
+    /** Tag for log messages */
+    private static final String LOG_TAG = NewsLoader.class.getName();
 
     private NewsAdapter mAdapter;
 
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(LOG_TAG, "TEST: onCreater() called");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -62,9 +68,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // And register to be notified of preference changes
         // So we know when the user has adjusted the query settings
         prefs.registerOnSharedPreferenceChangeListener(this);
-
-        NewsAsyncTask task = new NewsAsyncTask();
-        task.execute(REQUEST_URL);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected earthquake.
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
+            Log.i(LOG_TAG, "Test: calling initLoader()..");
             loaderManager.initLoader(1, null, this);
         } else {
             // Otherwise, display error
@@ -116,12 +120,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loadingIndicator.setVisibility(View.GONE);
 
             // Update empty state with no connection error message
-            mEmptyStateTextView.setText("No internet connection");
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
     }
 
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
+
+        Log.i(LOG_TAG, "Test: calling onCreateLoader()..");
+
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         // getString retrieves a String value from the preferences. The second parameter is the default value for this preference.
@@ -147,13 +154,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             uriBuilder.appendQueryParameter("section", section);
         }
 
-        Log.v("MainActivity", uriBuilder.toString());
+        Log.i(LOG_TAG, uriBuilder.toString());
 
         return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> news) {
+
+        Log.i(LOG_TAG, "TEST: onLoadFinished called...");
+        mEmptyStateTextView.setText(R.string.no_news);
 
         View loadingIndicator = findViewById(R.id.loading_indicator);
         TextView hintTextView = findViewById(R.id.hint);
@@ -170,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
+        Log.i(LOG_TAG, "TEST: onLoaderReset called...");
         mAdapter.clear();
     }
 
@@ -195,12 +206,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    private class NewsAsyncTask extends AsyncTask<String, Void, List<News>> {
-        /**
+/*    private class NewsAsyncTask extends AsyncTask<String, Void, List<News>> {
+        *//**
          * This method runs on a background thread and performs the network request.
          * We should not update the UI from a background thread, so we return a list of
          * {@link News}s as the result.
-         */
+         *//*
         @Override
         protected List<News> doInBackground (String... urls) {
             // Don't perform the request if there are no URLs, or the first URL is null.
@@ -222,5 +233,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         }
 
-    }
+    }*/
 }
